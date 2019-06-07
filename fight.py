@@ -2,46 +2,83 @@ from random import randint
 from time import sleep
 import threading
 import os
+import time
 
 class player():
-    def __init__(self, level, hp, xp):
+    def __init__(self, level, hp, xp, stam):
         self.level = level
         self.hp = hp
         self.xp = xp
-
+        self.stam = stam
+    def r_hook(self, enemy):
+        enemy.hp = enemy.hp - 2
+        print("Opponent hp: ", enemy.hp, "\n")
+    def l_hook(self, enemy):
+        enemy.hp = enemy.hp - 2
+        print("Opponent hp: ", enemy.hp, "\n")
+    def r_jab(self, enemy):
+        enemy.hp = enemy.hp - 1
+        print("Opponent hp: ", enemy.hp, "\n")
+    def l_jab(self, enemy):
+        enemy.hp = enemy.hp - 1
+        print("Opponent hp: ", enemy.hp, "\n")
+    
 class enemy():
     def __init__(self, level, hp):
         self.level = level
         self.hp = hp
     def punch(self, player):
         while player.hp > 0:
-            print("Your opponent throws a punch.\n") # block left/right eventually
-            pow = randint(0, 8) # will change to level based value
-            player.hp = player.hp - pow
-            sleep(2) # will change to level based value
+            if(self.hp > 0):
+                print("Your opponent throws a punch.\n") # block left/right eventually
+                pow = randint(0, 6) # will change to level based value
+                player.hp = player.hp - pow
+                sleep(2) # will change to level based value
         print("You fall to the ground.")
         sleep(1)
         print("GAME OVER")
-        os._exit(1) # kills the whole program (thread and main)
+        os._exit(1) # kills thread and main
+
+def print_tutorial():
+    print("Your moves:")
+    print(" - Right hook: `rhook`")
+    print(" - Left hook: `lhook`")
+    print(" - Right jab: `rjab`")
+    print(" - Left jab: `ljab`")
+    print(" - Uppercut: `uppercut`")
+    print(" - Display your hp: `hp`")
+    print(" - Display this tutorial again: `help`\n")
 
 if __name__ == "__main__":
+    #timing
+    startTime = time.time()
+    elapsedTime = time.time() - startTime
+
     # flags
     start = True
     fight = False
 
     # game
     ai = enemy(10,10)
-    guy = player(10,10,0)
+    guy = player(10,10,0,10)
     print("You're in a boxing ring. There's someone in the opposite corner. Fight him?")
 
     while start:
         x = input("> ")
         if x == "yes" or x == "y":
-            print("DING DING DING")
+            print("Want to read the tutorial first?")
+            tut = input("> ")
+            if tut == "yes" or tut == "y":
+                print_tutorial()
+                sleep(5)
+            else:
+                print("Okay, never mind.\n")
+                sleep(1)
+            print("DING DING DING\n")
             sleep(1)
-            print("FIGHT!")
+            print("A challenger approaches.\n")
             sleep(1)
-            print("A challenger approaches. Type help for a tutorial.\n")
+            print("FIGHT!\n")
             sleep(1)
             fight = True
             start = False
@@ -55,22 +92,35 @@ if __name__ == "__main__":
         else:
             print("Hm? Speak up son.\n")
 
+    # opponent starts punching
     thread = threading.Thread(target=ai.punch, args=[guy])
     thread.daemon = True
     thread.start()
 
     while fight:
-        x = input()
-        if x == "help":
-            print("Your opponent will attack until you're on the ground.")
-            print("Your moves:")
-            print(" - Right hook: `r hook`")
-            print(" - Left hook: `l hook`")
-            print(" - Right jab: `r jab`")
-            print(" - Left jab: `l jab`")
-            print(" - Uppercut: `uppercut`")
-            print(" - Display your hp: `hp`\n")
-        elif x == "hp":
-            print("Your hp: ", guy.hp,"\n")
+        if ai.hp > 0:
+            x = input()
+            if x == "help":
+                print_tutorial()
+            elif x == "hp":
+                print("Your hp: ", guy.hp, "\n")
+            elif x == "rhook":
+                guy.r_hook(ai)
+            elif x == "lhook":
+                guy.l_hook(ai)
+            elif x == "rjab":
+                guy.r_jab(ai)
+            elif x == "ljab":
+                guy.l_jab(ai)
+            else:
+                print("What?\n")
         else:
-            print("What?\n")
+            print("You knock him to the ground.")
+            sleep(1)
+            print("You win!")
+            sleep(1)
+            # print("Final time:", elapsedTime, "\n")
+            os._exit(1)
+            
+            # guy.stam = guy.stam + 1 # increment stam by 1 automatically
+            # implement stamina later
