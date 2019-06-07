@@ -1,5 +1,6 @@
 from random import randint
 from time import sleep
+from multiprocessing import Process as process
 
 class player():
     def __init__(self, level, hp, xp):
@@ -11,44 +12,65 @@ class enemy():
     def __init__(self, level, hp):
         self.level = level
         self.hp = hp
-    def fight(self, player):
-        pow = randint(0, self.level)
-        # heal = randint(0, self.level // 2)
+    def punch(self, player):
+        while player.hp != 0:
+            print("Your opponent throws a punch.") # block left/right eventually
+            pow = randint(0, 10) # will change to level based value
+            player.hp = player.hp - pow
+            sleep(.5) 
+            print("YOUR HP:", player.hp)
+            sleep(2) # will change to level based value
 
-# flags
-start = True
-fight = False
+def fight_sequence():
+    while True:
+        if guy.hp <= 0:
+            print("You fall to the ground.")
+            sleep(1)
+            print("GAME OVER")
+            exit()
+        else:
+            x = input("> ")
+            if x == "help":
+                print("Your opponent will attack until you're on the ground.")
+                print("Your moves:")
+                print(" - Right hook: `r hook`")
+                print(" - Left hook: `l hook`")
+                print(" - Right jab: `r jab`")
+                print(" - Left jab: `l jab`")
+                print(" - Uppercut: `uppercut`")
+            else:
+                print("What?")
 
-# game
-enemy = enemy(10,10)
-guy = player(10,10,0)
-print("You're in a boxing ring. There's a guy in the opposite corner. Fight him? (y/n)")
+if __name__ == "__main__":
+    # flags
+    start = True
+    fight = False
 
-while start is True:
-    x = input("> ") # x is generic var for all input string
-    if x is "y":
-        print("DING DING DING")
-        sleep(1)
-        print("FIGHT!")
-        sleep(1)
-        print("The challenger approaches. Type help for a tutorial.")
-        start = False
-        fight = True
-    elif x is "n":
-        print("WHAT?!")
-        sleep(1)
-        print("The crowd throws tomatoes at you.")
-        sleep(1)
-        print("THE END")
-        exit()
-    else:
-        print("Hm? Speak up son.\n")
+    # game
+    ai = enemy(10,10)
+    guy = player(10,10,0)
+    print("You're in a boxing ring. There's a guy in the opposite corner. Fight him?")
 
-while fight is True:
-    if guy.hp == 0:
-        print("You fall to the ground.")
-        sleep(1)
-        print("GAME OVER")
-        exit()
-    else:
+    while start is True:
         x = input("> ")
+        if x == "yes" or x == "y":
+            print("DING DING DING")
+            sleep(1)
+            print("FIGHT!")
+            sleep(1)
+            print("A challenger approaches. Type help for a tutorial.")
+            sleep(2)
+            fight = True
+            start = False
+        elif x == "no" or x == "n":
+            print("You bow out.")
+            sleep(1)
+            print("The crowd throws tomatoes at you.")
+            sleep(1)
+            print("GAME OVER")
+            exit()
+        else:
+            print("Hm? Speak up son.")
+
+    process(target = fight_sequence()).start
+    process(target = ai.punch(guy)).start
