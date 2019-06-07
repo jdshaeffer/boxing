@@ -24,6 +24,16 @@ class enemy():
         print("GAME OVER")
         os._exit(1) # kills the whole program (thread and main)
 
+def print_tutorial():
+    print("Your moves:")
+    print(" - Right hook: `r hook`")
+    print(" - Left hook: `l hook`")
+    print(" - Right jab: `r jab`")
+    print(" - Left jab: `l jab`")
+    print(" - Uppercut: `uppercut`")
+    print(" - Display your hp: `hp`")
+    print(" - Display this tutorial again: `help`\n")
+
 if __name__ == "__main__":
     # flags
     start = True
@@ -37,11 +47,19 @@ if __name__ == "__main__":
     while start:
         x = input("> ")
         if x == "yes" or x == "y":
+            print("Want to read the tutorial first?")
+            tut = input("> ")
+            if tut == "yes" or tut == "y":
+                print_tutorial()
+                sleep(5)
+            else:
+                print("Okay, never mind.\n")
+                sleep(1)
             print("DING DING DING")
             sleep(1)
             print("FIGHT!")
             sleep(1)
-            print("A challenger approaches. Type help for a tutorial.\n")
+            print("A challenger approaches.\n")
             sleep(1)
             fight = True
             start = False
@@ -62,14 +80,7 @@ if __name__ == "__main__":
     while fight:
         x = input()
         if x == "help":
-            print("Your opponent will attack until you're on the ground.")
-            print("Your moves:")
-            print(" - Right hook: `r hook`")
-            print(" - Left hook: `l hook`")
-            print(" - Right jab: `r jab`")
-            print(" - Left jab: `l jab`")
-            print(" - Uppercut: `uppercut`")
-            print(" - Display your hp: `hp`\n")
+            print_tutorial()
         elif x == "hp":
             print("Your hp: ", guy.hp,"\n")
         else:
