@@ -112,7 +112,7 @@ if __name__ == "__main__":
                 guy.r_jab(ai)
             elif x == "ljab":
                 guy.l_jab(ai)
-            elif x == "uppercut"
+            elif x == "uppercut":
                 guy.uppercut(ai)
             else:
                 print("What?\n")
