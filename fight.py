@@ -50,10 +50,6 @@ def print_tutorial():
     print(" - Display this tutorial again: `help`\n")
 
 if __name__ == "__main__":
-    #timing
-    startTime = time.time()
-    elapsedTime = time.time() - startTime
-
     # flags
     start = True
     fight = False
@@ -62,7 +58,8 @@ if __name__ == "__main__":
     ai = enemy(10,10)
     guy = player(10,10,0,10)
     print("You're in a boxing ring. There's someone in the opposite corner. Fight him?")
-
+    startTime = time.time()
+    
     while start:
         x = input("> ")
         if x == "yes" or x == "y":
@@ -119,7 +116,8 @@ if __name__ == "__main__":
             sleep(1)
             print("You win!")
             sleep(1)
-            # print("Final time:", elapsedTime, "\n")
+            elapsedTime = time.time() - startTime
+            print("Final time:", elapsedTime, "\n")
             os._exit(1)
             
             # guy.stam = guy.stam + 1 # increment stam by 1 automatically
