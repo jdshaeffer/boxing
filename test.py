@@ -2,13 +2,15 @@ import threading
 import time
 import sys
 
-def background():
+str = 'disarm me by typing disarm'
+
+def background(str):
     while True:
-        time.sleep(3)
-        print 'disarm me by typing disarm'
+        time.sleep(2)
+        print str
 
 # runs regardless of user input
-threading1 = threading.Thread(target=background)
+threading1 = threading.Thread(target=background, args=[str])
 threading1.daemon = True
 threading1.start()
 

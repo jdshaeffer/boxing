@@ -29,7 +29,7 @@ if __name__ == "__main__":
     # game
     ai = enemy(10,10)
     guy = player(10,10,0)
-    print("You're in a boxing ring. There's a guy in the opposite corner. Fight him?")
+    print("You're in a boxing ring. There's someone in the opposite corner. Fight him?")
 
     while start:
         x = input("> ")
@@ -52,7 +52,7 @@ if __name__ == "__main__":
         else:
             print("Hm? Speak up son.")
 
-    thread = threading.Thread(target=ai.punch(guy))
+    thread = threading.Thread(target=ai.punch, args=[guy])
     thread.daemon = True
     thread.start()
 
