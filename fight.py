@@ -22,6 +22,9 @@ class player():
     def l_jab(self, enemy):
         enemy.hp = enemy.hp - 1
         print("Opponent hp: ", enemy.hp, "\n")
+    def uppercut(self, enemy):
+        enemy.hp = enemy.hp - 3
+        print("Opponent hp: ", enemy.hp, "\n")
     
 class enemy():
     def __init__(self, level, hp):
@@ -109,6 +112,8 @@ if __name__ == "__main__":
                 guy.r_jab(ai)
             elif x == "ljab":
                 guy.l_jab(ai)
+            elif x == "uppercut"
+                guy.uppercut(ai)
             else:
                 print("What?\n")
         else:
