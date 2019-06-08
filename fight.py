@@ -61,6 +61,23 @@ if __name__ == "__main__":
     ai = enemy(10,10)
     guy = player(10,10,0,10)
     print("You're in a boxing ring. There's someone in the opposite corner. Fight him?")
+    print("""
+                              /////'
+                             '  # o
+                             C   - |
+                ___          '  =__'        ___
+               (` _ \_       |   |        _/  ')
+                \  (__\  ,---- _ |----.  /__)- |
+                 \__  ( (           /  ) )  __/
+                   |_X_\/ \.   #  _.|  \/_X_|
+                     |  \ /(   /    /\ /  |
+                      \ /  (  ,    /  \ _/
+                           /______/
+                          [:::::::]
+                         /*%*%*%*%*\\
+                         >%*%#%*%*%|
+                        /%*%*#*%*%*\\
+                       ######^######  \n\n\n""")
     startTime = time.time()
     
     while start:
