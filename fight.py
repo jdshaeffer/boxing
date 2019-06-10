@@ -78,7 +78,6 @@ if __name__ == "__main__":
                          >%*%#%*%*%|
                         /%*%*#*%*%*\\
                        ######^######  \n\n\n""")
-    startTime = time.time()
     
     while start:
         x = input("> ")
@@ -96,6 +95,7 @@ if __name__ == "__main__":
             print("A challenger approaches.\n")
             sleep(1)
             print("FIGHT!\n")
+            startTime = time.time() # start the timer
             sleep(1)
             fight = True
             start = False
