@@ -5,7 +5,8 @@ import sys, os, select
 
 
 class attack(): # similar to a weapons class
-    def __init__(self, pow):
+    def __init__(self, name, pow):
+        self.name = name
         self.pow = pow
 
 class player():
@@ -24,36 +25,36 @@ class player():
     |------------|------------|
     | (i) item   |  (f) flee  |
     +------------+------------+\n""")
+            self.show_hp()
             x = input("> ")
-            if x == "a":
+            if x == "a" or x == "attack":
                 self.attack(ai)
                 break
-            elif x == "i":
+            elif x == "i" or x == "item":
                 self.item()
                 break
-            elif x == "r":
+            elif x == "r" or x == "rest":
                 self.rest()
                 break
-            elif x == "f":
+            elif x == "f" or x == "flee":
                 self.flee()
                 break
             else:
                 print("Sorry, try again.")
 
     def show_hp(self):
-        print("Your hp:")
-        print("+", end="")
-        for _ in range(self.level):
+        print("    +", end="") # 4 spaces
+        for _ in range(self.level+9): # level+9 because you start at level 1 with total hp 10
             print("-", end="")
         print("+")
-        print("|",end="")
+        print("    |",end="") # 4 spaces
         for _ in range(self.hp):
             print("#", end="")
-        for _ in range(self.level-self.hp):
+        for _ in range((self.level+9)-self.hp):
             print(" ", end="")
-        print("| ",self.hp,"/",self.level)
-        print("+", end="")
-        for _ in range(self.level):
+        print("| ",self.hp,"/",self.level+9)
+        print("    +", end="") # 4 spaces
+        for _ in range(self.level+9):
             print("-", end="")
         print("+")
 
@@ -61,16 +62,15 @@ class player():
         # how to add more moves as the player levels up - list access
         while 1:
             for i in range(len(attacks)):
-                print(i + ") " + attacks[i])
-            x = input("> ")
-            # if x == "1" or x == "right hook":
-                
-            # elif x == "2" or x == "left hook":
-            # elif x == "3" or x == "right jab":
-            # elif x == "4" or x == "left jab":
-            # elif x == "5" or x == "uppercut":
-            # else:
-            #     print("I don't know that move.")
+                print(str(i) + ") " + attacks[i].name)
+            print("")
+            x = int(input("> "))
+            try:
+                print("You use " + attacks[x].name + ".")
+                ai.hp = ai.hp - attacks[i].pow
+                break
+            except (IndexError, ValueError):
+                print("Please input a valid number.")
 
     def rest(self):
         print("Resting...")
@@ -86,8 +86,9 @@ class enemy():
         self.hp = hp
         self.speed = speed
     def punch(self, player):
-        print("He throws a high punch.\n> ", end = "")
-        i, o, e = select.select([sys.stdin], [], [], self.speed)
+        print("He throws a high punch.\n\n> ", end = "")
+        i, o, e = select.select([sys.stdin], [], [], self.speed) # ignore pylint here
+        print("")
         if i:
             x = sys.stdin.readline().strip()
             if x == "duck":
@@ -100,6 +101,8 @@ class enemy():
                 player.hp = player.hp - pow
         else:
             print("\nHe hits you.")
+            pow = randint(2, self.level)
+            player.hp = player.hp - pow
         sleep(1)
     
     # def block(self, player):
@@ -113,12 +116,14 @@ if __name__ == "__main__":
     start = True
     fight = False
 
-    # object creation
-    righthook = attack(2)
-    lefthook = attack(2)
-    rightjab = attack(1)
-    leftjab = attack(1)
+    # attack creation
+    righthook = attack("righthook", 2)
+    lefthook = attack("lefthook", 2)
+    rightjab = attack("rightjab", 1)
+    leftjab = attack("leftjab", 1)
     attacks = [righthook, lefthook, rightjab, leftjab]
+
+    # character creation
     ai = enemy(4,10,3)
     guy = player(1,10,10,attacks)
 
@@ -145,24 +150,27 @@ if __name__ == "__main__":
     while start:
         x = input("> ")
         if x == "yes" or x == "y":
-            print("Want to read the tutorial first?")
+            print("Want to read the tutorial first?\n")
             tut = input("> ")
             if tut == "yes" or tut == "y":
                 print_tutorial()
                 sleep(5)
+            elif tut == "no" or tut == "n":
+                print("Okay, good luck.")
+                sleep(1)
             else:
-                print("Okay, never mind.\n")
+                print("Never mind.\n")
                 sleep(1)
             print("DING DING DING\n")
             sleep(1)
             print("A challenger approaches.\n")
             sleep(1)
             print("FIGHT!\n")
+            sleep(1)
             sys.stdout.flush() # flush buffer (accept input only after FIGHT)
             while select.select([sys.stdin.fileno()], [], [], 0.0)[0]:
-                os.read(sys.stdin.fileno(), 4096) # thanks to @Kylar from SO for this solution
+                os.read(sys.stdin.fileno(), 4096)
             startTime = time.time() # start the timer
-            sleep(1)
             fight = True
             start = False
         elif x == "no" or x == "n":
@@ -192,6 +200,3 @@ if __name__ == "__main__":
         else:
             ai.punch(guy)
             guy.turn(ai)
-            
-            # guy.stam = guy.stam + 1 # increment stam by 1 automatically
-            # implement stamina later

@@ -97,7 +97,7 @@ if __name__ == "__main__":
             print("FIGHT!\n")
             sys.stdout.flush() # flush buffer (accept input only after FIGHT)
             while select.select([sys.stdin.fileno()], [], [], 0.0)[0]:
-                os.read(sys.stdin.fileno(), 4096) # thanks to @Kylar on so for this solution
+                os.read(sys.stdin.fileno(), 4096)
             startTime = time.time() # start the timer
             sleep(1)
             fight = True
