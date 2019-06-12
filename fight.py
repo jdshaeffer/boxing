@@ -1,8 +1,9 @@
 from random import randint
 from time import sleep
 import threading
-import os
+import os, select
 import time
+import sys
 
 class player():
     def __init__(self, level, hp, xp, stam):
@@ -44,13 +45,12 @@ class enemy():
 
 def print_tutorial():
     print("Your moves:")
-    print(" - Right hook: `rhook`")
-    print(" - Left hook: `lhook`")
-    print(" - Right jab: `rjab`")
-    print(" - Left jab: `ljab`")
-    print(" - Uppercut: `uppercut`")
-    print(" - Display your hp: `hp`")
-    print(" - Display this tutorial again: `help`\n")
+    print(" - Right hook: rhook")
+    print(" - Left hook: lhook")
+    print(" - Right jab: rjab")
+    print(" - Left jab: ljab")
+    print(" - Uppercut: uppercut")
+    print(" - Display this tutorial again: help\n")
 
 if __name__ == "__main__":
     # flags
@@ -95,6 +95,9 @@ if __name__ == "__main__":
             print("A challenger approaches.\n")
             sleep(1)
             print("FIGHT!\n")
+            sys.stdout.flush() # flush buffer (accept input only after FIGHT)
+            while select.select([sys.stdin.fileno()], [], [], 0.0)[0]:
+                os.read(sys.stdin.fileno(), 4096) # thanks to @Kylar for this solution
             startTime = time.time() # start the timer
             sleep(1)
             fight = True
@@ -119,8 +122,6 @@ if __name__ == "__main__":
             x = input()
             if x == "help":
                 print_tutorial()
-            elif x == "hp":
-                print("Your hp: ", guy.hp, "\n")
             elif x == "rhook":
                 guy.r_hook(ai)
             elif x == "lhook":
