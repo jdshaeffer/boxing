@@ -64,20 +64,24 @@ class player():
             for i in range(len(attacks)):
                 print(str(i) + ") " + attacks[i].name)
             print("")
-            x = int(input("> "))
             try:
+                x = int(input("> "))
                 print("You use " + attacks[x].name + ".")
                 ai.hp = ai.hp - attacks[i].pow
                 break
             except (IndexError, ValueError):
-                print("Please input a valid number.")
+                print("Please input a valid number.\n")
+        sleep(1)
 
     def rest(self):
         print("Resting...")
+        sleep(1)
     def item(self):
         print("item...")
+        sleep(1)
     def flee(self):
         print("fleeing...")
+        sleep(1)
     # def levelup(self, attacks):
     
 class enemy():
@@ -145,7 +149,7 @@ if __name__ == "__main__":
                          /*%*%*%*%*\\
                          >%*%#%*%*%|
                         /%*%*#*%*%*\\
-                       ######^######  \n\n\n""")
+                       ######^######  \n\n""")
     
     while start:
         x = input("> ")
@@ -156,7 +160,7 @@ if __name__ == "__main__":
                 print_tutorial()
                 sleep(5)
             elif tut == "no" or tut == "n":
-                print("Okay, good luck.")
+                print("Okay, good luck.\n")
                 sleep(1)
             else:
                 print("Never mind.\n")
