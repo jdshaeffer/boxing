@@ -1,47 +1,75 @@
 from random import randint
 from time import sleep
-import threading
 import os, select
 import time
-import sys
 
 class player():
-    def __init__(self, level, hp, xp, stam):
+    def __init__(self, level, hp, stam):
         self.level = level
         self.hp = hp
-        self.xp = xp
         self.stam = stam
-    def r_hook(self, enemy):
-        enemy.hp = enemy.hp - 2
-        print("Opponent hp: ", enemy.hp, "\n")
-    def l_hook(self, enemy):
-        enemy.hp = enemy.hp - 2
-        print("Opponent hp: ", enemy.hp, "\n")
-    def r_jab(self, enemy):
-        enemy.hp = enemy.hp - 1
-        print("Opponent hp: ", enemy.hp, "\n")
-    def l_jab(self, enemy):
-        enemy.hp = enemy.hp - 1
-        print("Opponent hp: ", enemy.hp, "\n")
-    def uppercut(self, enemy):
-        enemy.hp = enemy.hp - 3
-        print("Opponent hp: ", enemy.hp, "\n")
+    def turn(self, ai):
+        while 1:
+            print("""
+            +------------+------------+
+            | (a) attack |  (r) rest  |
+            |------------|------------|
+            | (i) item   |  (f) flee  |
+            +------------+------------+
+            """)
+            x = input("> ")
+            if x == "a":
+                self.attack(ai)
+                break
+            elif x == "i":
+                self.item()
+                break
+            elif x == "r":
+                self.rest()
+                break
+            elif x == "f":
+                self.flee()
+                break
+            else:
+                print("Sorry, try again.")
+    def attack(self, ai):
+        while 1:
+            print("""
+            1) right hook
+            2) left hook
+            3) right jab
+            4) left jab
+            5) uppercut
+            """)
+            x = input("> ")
+            if x == "1" or x == "right hook":
+            elif x == "2" or x == "left hook":
+            elif x == "3" or x == "right jab":
+            elif x == "4" or x == "left jab":
+            elif x == "5" or x == "uppercut":
+            else:
+                print("I don't know that move.")
+
+    def rest(self):
+    def item(self):
+    def flee(self):
     
 class enemy():
     def __init__(self, level, hp):
         self.level = level
         self.hp = hp
     def punch(self, player):
-        while player.hp > 0:
-            if(self.hp > 0):
-                print("Your opponent throws a punch.\n") # block left/right eventually
-                pow = randint(0, 4) # will change to level based value
-                player.hp = player.hp - pow
-                sleep(2) # will change to level based value
-        print("You fall to the ground.")
-        sleep(1)
-        print("GAME OVER")
-        os._exit(1) # kills thread and main
+        print("Your opponent throws a high punch.\n") # randomly or smartly generated high/low/side punches
+        sleep(3)
+        x = input("> ")
+        if x == "duck":
+            print("He misses.")
+        elif x == "block high":
+            print("You block his high punch.")
+        else:
+            print("He hits you.")
+            pow = randint(0, 4) # will change to level based value
+            player.hp = player.hp - pow
 
 def print_tutorial():
     print("Your moves:")
@@ -59,7 +87,7 @@ if __name__ == "__main__":
 
     # game
     ai = enemy(10,10)
-    guy = player(10,10,0,10)
+    guy = player(10,10,10)
     print("You're in a boxing ring. There's someone in the opposite corner. Fight him?")
     print("""
                               /////'
@@ -97,7 +125,7 @@ if __name__ == "__main__":
             print("FIGHT!\n")
             sys.stdout.flush() # flush buffer (accept input only after FIGHT)
             while select.select([sys.stdin.fileno()], [], [], 0.0)[0]:
-                os.read(sys.stdin.fileno(), 4096) # thanks to @Kylar on so for this solution
+                os.read(sys.stdin.fileno(), 4096) # thanks to @Kylar from SO for this solution
             startTime = time.time() # start the timer
             sleep(1)
             fight = True
@@ -112,36 +140,23 @@ if __name__ == "__main__":
         else:
             print("Hm? Speak up son.\n")
 
-    # opponent starts punching
-    thread = threading.Thread(target=ai.punch, args=[guy])
-    thread.daemon = True
-    thread.start()
-
     while fight:
-        if ai.hp > 0:
-            x = input()
-            if x == "help":
-                print_tutorial()
-            elif x == "rhook":
-                guy.r_hook(ai)
-            elif x == "lhook":
-                guy.l_hook(ai)
-            elif x == "rjab":
-                guy.r_jab(ai)
-            elif x == "ljab":
-                guy.l_jab(ai)
-            elif x == "uppercut":
-                guy.uppercut(ai)
-            else:
-                print("What?\n")
-        else:
+        if guy.hp <= 0:
+            print("You fall to the ground.")
+            sleep(1)
+            print("GAME OVER")
+            fight = False
+        elif ai.hp <= 0:
             print("You knock him to the ground.")
             sleep(1)
             print("You win!")
             sleep(1)
             elapsedTime = time.time() - startTime
             print("Final time:", elapsedTime, "\n")
-            os._exit(1)
+            fight = False
+        else:
+            ai.punch(guy)
+            guy.turn(ai)
             
             # guy.stam = guy.stam + 1 # increment stam by 1 automatically
             # implement stamina later
