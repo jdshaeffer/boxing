@@ -1,22 +1,29 @@
 from random import randint
 from time import sleep
-import os, select
 import time
+import sys, os, select
+
+
+class attack(): # similar to a weapons class
+    def __init__(self, pow):
+        self.pow = pow
 
 class player():
-    def __init__(self, level, hp, stam):
+    def __init__(self, level, hp, stam, attacks):
         self.level = level
         self.hp = hp
         self.stam = stam
+        self.attacks = attacks
+
     def turn(self, ai):
         while 1:
             print("""
-            +------------+------------+
-            | (a) attack |  (r) rest  |
-            |------------|------------|
-            | (i) item   |  (f) flee  |
-            +------------+------------+
-            """)
+    Your turn.
+    +------------+------------+
+    | (a) attack |  (r) rest  |
+    |------------|------------|
+    | (i) item   |  (f) flee  |
+    +------------+------------+\n""")
             x = input("> ")
             if x == "a":
                 self.attack(ai)
@@ -32,62 +39,90 @@ class player():
                 break
             else:
                 print("Sorry, try again.")
+
+    def show_hp(self):
+        print("Your hp:")
+        print("+", end="")
+        for _ in range(self.level):
+            print("-", end="")
+        print("+")
+        print("|",end="")
+        for _ in range(self.hp):
+            print("#", end="")
+        for _ in range(self.level-self.hp):
+            print(" ", end="")
+        print("| ",self.hp,"/",self.level)
+        print("+", end="")
+        for _ in range(self.level):
+            print("-", end="")
+        print("+")
+
     def attack(self, ai):
+        # how to add more moves as the player levels up - list access
         while 1:
-            print("""
-            1) right hook
-            2) left hook
-            3) right jab
-            4) left jab
-            5) uppercut
-            """)
+            for i in range(len(attacks)):
+                print(i + ") " + attacks[i])
             x = input("> ")
-            if x == "1" or x == "right hook":
-            elif x == "2" or x == "left hook":
-            elif x == "3" or x == "right jab":
-            elif x == "4" or x == "left jab":
-            elif x == "5" or x == "uppercut":
-            else:
-                print("I don't know that move.")
+            # if x == "1" or x == "right hook":
+                
+            # elif x == "2" or x == "left hook":
+            # elif x == "3" or x == "right jab":
+            # elif x == "4" or x == "left jab":
+            # elif x == "5" or x == "uppercut":
+            # else:
+            #     print("I don't know that move.")
 
     def rest(self):
+        print("Resting...")
     def item(self):
+        print("item...")
     def flee(self):
+        print("fleeing...")
+    # def levelup(self, attacks):
     
 class enemy():
-    def __init__(self, level, hp):
+    def __init__(self, level, hp, speed):
         self.level = level
         self.hp = hp
+        self.speed = speed
     def punch(self, player):
-        print("Your opponent throws a high punch.\n") # randomly or smartly generated high/low/side punches
-        sleep(3)
-        x = input("> ")
-        if x == "duck":
-            print("He misses.")
-        elif x == "block high":
-            print("You block his high punch.")
+        print("He throws a high punch.\n> ", end = "")
+        i, o, e = select.select([sys.stdin], [], [], self.speed)
+        if i:
+            x = sys.stdin.readline().strip()
+            if x == "duck":
+                print("He misses.")
+            elif x == "block high":
+                print("You block his attack.")
+            else:
+                print("He hits you.")
+                pow = randint(2, self.level)
+                player.hp = player.hp - pow
         else:
-            print("He hits you.")
-            pow = randint(0, 4) # will change to level based value
-            player.hp = player.hp - pow
+            print("\nHe hits you.")
+        sleep(1)
+    
+    # def block(self, player):
+
 
 def print_tutorial():
-    print("Your moves:")
-    print(" - Right hook: rhook")
-    print(" - Left hook: lhook")
-    print(" - Right jab: rjab")
-    print(" - Left jab: ljab")
-    print(" - Uppercut: uppercut")
-    print(" - Display this tutorial again: help\n")
+    print("here's a tutorial...")
 
 if __name__ == "__main__":
     # flags
     start = True
     fight = False
 
-    # game
-    ai = enemy(10,10)
-    guy = player(10,10,10)
+    # object creation
+    righthook = attack(2)
+    lefthook = attack(2)
+    rightjab = attack(1)
+    leftjab = attack(1)
+    attacks = [righthook, lefthook, rightjab, leftjab]
+    ai = enemy(4,10,3)
+    guy = player(1,10,10,attacks)
+
+    # execution
     print("You're in a boxing ring. There's someone in the opposite corner. Fight him?")
     print("""
                               /////'
