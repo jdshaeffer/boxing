@@ -26,6 +26,8 @@ class player():
     | (i) item   |  (f) flee  |
     +------------+------------+\n""")
             self.show_hp()
+            self.show_stam()
+            print("")
             x = input("> ")
             if x == "a" or x == "attack":
                 self.attack(ai)
@@ -52,14 +54,21 @@ class player():
             print("#", end="")
         for _ in range((self.level+9)-self.hp):
             print(" ", end="")
-        print("| ",self.hp,"/",self.level+9)
+        print("| ",self.hp,"/",self.level+9," (hp)")
         print("    +", end="") # 4 spaces
         for _ in range(self.level+9):
             print("-", end="")
         print("+")
 
+    def show_stam(self):
+        print("     ",end="") # 5 spaces
+        for _ in range(self.stam):
+            print("*", end="")
+        for _ in range((self.level+9)-self.stam):
+            print(" ", end="")
+        print("  ",self.stam,"/",self.level+9," (stamina)")
+
     def attack(self, ai):
-        # how to add more moves as the player levels up - list access
         while 1:
             for i in range(len(attacks)):
                 print(str(i) + ") " + attacks[i].name)
@@ -67,21 +76,27 @@ class player():
             try:
                 x = int(input("> "))
                 print("You use " + attacks[x].name + ".")
-                ai.hp = ai.hp - attacks[i].pow
+                ai.hp -= attacks[i].pow
+                self.stam -= attacks[i].pow
                 break
             except (IndexError, ValueError):
                 print("Please input a valid number.\n")
         sleep(1)
 
     def rest(self):
-        print("Resting...")
+        print("You back off for a few seconds.")
+        print("(stamina + 2)")
+        self.stam += 2
         sleep(1)
+
     def item(self):
         print("item...")
         sleep(1)
+
     def flee(self):
         print("fleeing...")
         sleep(1)
+
     # def levelup(self, attacks):
     
 class enemy():
@@ -128,8 +143,8 @@ if __name__ == "__main__":
     attacks = [righthook, lefthook, rightjab, leftjab]
 
     # character creation
-    ai = enemy(4,10,3)
-    guy = player(1,10,10,attacks)
+    ai = enemy(4,10,3) # level 4 ai with hp 10 and speed 3
+    guy = player(1,10,10,attacks) # default: level 1, hp 10, stamina 10, default moves
 
     # execution
     print("You're in a boxing ring. There's someone in the opposite corner. Fight him?")
