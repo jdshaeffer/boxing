@@ -1,148 +1,9 @@
-from random import randint
 from time import sleep
 import time
 import sys, os, select
-
-class attack(): # similar to a weapons class
-    def __init__(self, name, pow):
-        self.name = name
-        self.pow = pow
-
-class player():
-    def __init__(self, level, hp, stam, attacks):
-        self.level = level
-        self.hp = hp
-        self.stam = stam
-        self.attacks = attacks
-
-    def turn(self, ai):
-        while 1:
-            print("""
-    Your turn.
-    +------------+------------+
-    | (a) attack |  (r) rest  |
-    |------------|------------|
-    | (i) item   |  (f) flee  |
-    +------------+------------+\n""")
-            self.show_hp()
-            self.show_stam()
-            print("")
-            x = input("> ")
-            if x == "a" or x == "attack":
-                self.attack(ai)
-                break
-            elif x == "i" or x == "item":
-                self.item()
-                break
-            elif x == "r" or x == "rest":
-                self.rest()
-                break
-            elif x == "f" or x == "flee":
-                self.flee()
-                break
-            else:
-                print("Sorry, try again.")
-
-    def show_hp(self):
-        print("    +", end="") # 4 spaces
-        for _ in range(self.level+9): # level+9 because you start at level 1 with total hp 10
-            print("-", end="")
-        print("+")
-        print("    |",end="") # 4 spaces
-        for _ in range(self.hp):
-            print("#", end="")
-        for _ in range((self.level+9)-self.hp):
-            print(" ", end="")
-        print("| ",self.hp,"/",self.level+9," (hp)")
-        print("    +", end="") # 4 spaces
-        for _ in range(self.level+9):
-            print("-", end="")
-        print("+")
-
-    def show_stam(self):
-        print("     ",end="") # 5 spaces
-        for _ in range(self.stam):
-            print("*", end="")
-        for _ in range((self.level+9)-self.stam):
-            print(" ", end="")
-        print("  ",self.stam,"/",self.level+9," (stamina)")
-
-    def attack(self, ai):
-        while 1:
-            for i in range(len(attacks)):
-                print(str(i) + ") " + attacks[i].name)
-            print("")
-            try:
-                x = int(input("> "))
-                print("You use " + attacks[x].name + ".")
-                ai.hp -= attacks[x].pow
-                self.stam -= attacks[x].pow
-                break
-            except (IndexError, ValueError):
-                print("Please input a valid number.\n")
-        sleep(1)
-        ai.show_enemy_hp()
-        sleep(1)
-
-    def rest(self):
-        print("You back off for a few seconds.")
-        print("(stamina + 2)")
-        self.stam += 2
-        sleep(1)
-
-    def item(self):
-        print("item...")
-        sleep(1)
-
-    def flee(self):
-        print("fleeing...")
-        sleep(1)
-
-    # def levelup(self, attacks):
-    
-class enemy():
-    def __init__(self, level, hp, speed):
-        self.level = level
-        self.hp = hp
-        self.speed = speed
-
-    def punch(self, player):
-        print("He throws a high punch.\n\n> ", end = "")
-        i, o, e = select.select([sys.stdin], [], [], self.speed) # ignore pylint here
-        print("")
-        if i:
-            x = sys.stdin.readline().strip()
-            if x == "duck":
-                print("He misses.")
-            elif x == "block high":
-                print("You block his attack.")
-            else:
-                print("He hits you.")
-                pow = randint(2, self.level)
-                player.hp = player.hp - pow
-        else:
-            print("\nHe hits you.")
-            pow = randint(2, self.level)
-            player.hp = player.hp - pow
-        sleep(1)
-    
-    def show_enemy_hp(self):
-        print("    +", end="") # 4 spaces
-        for _ in range(self.level+9): # level+9 because you start at level 1 with total hp 10
-            print("-", end="")
-        print("+")
-        print("    |", end="") # 4 spaces
-        for _ in range(self.hp):
-            print("#", end="")
-        for _ in range((self.level+9)-self.hp):
-            print(" ", end="")
-        print("| ",self.hp,"/",self.level+9," (enemy hp)")
-        print("    +", end="") # 4 spaces
-        for _ in range(self.level+9):
-            print("-", end="")
-        print("+")
-    # def block(self, player):
-
+from enemies.boxer import Boxer
+from attack import Attack
+from player import Player
 
 def print_tutorial():
     print("here's a tutorial...")
@@ -153,15 +14,15 @@ if __name__ == "__main__":
     fight = False
 
     # attack creation
-    righthook = attack("righthook", 2)
-    lefthook = attack("lefthook", 2)
-    rightjab = attack("rightjab", 1)
-    leftjab = attack("leftjab", 1)
+    righthook = Attack("righthook", 2)
+    lefthook = Attack("lefthook", 2)
+    rightjab = Attack("rightjab", 1)
+    leftjab = Attack("leftjab", 1)
     attacks = [righthook, lefthook, rightjab, leftjab]
 
     # character creation
-    ai = enemy(4,10,3) # level 4 ai with hp 10 and speed 3
-    guy = player(1,10,10,attacks) # default: level 1, hp 10, stamina 10, default moves
+    ai = Boxer(4,13,3) # level 1 ai with hp 13 and speed 3 (level plus 9 = default hp)
+    guy = Player(1,10,10,attacks) # default: level 1, hp 10, stamina 10, default moves
 
     # execution
     print("You're in a boxing ring. There's someone in the opposite corner. Fight him?")
