@@ -3,7 +3,6 @@ from time import sleep
 import time
 import sys, os, select
 
-
 class attack(): # similar to a weapons class
     def __init__(self, name, pow):
         self.name = name
@@ -76,8 +75,8 @@ class player():
             try:
                 x = int(input("> "))
                 print("You use " + attacks[x].name + ".")
-                ai.hp -= attacks[i].pow
-                self.stam -= attacks[i].pow
+                ai.hp -= attacks[x].pow
+                self.stam -= attacks[x].pow
                 break
             except (IndexError, ValueError):
                 print("Please input a valid number.\n")
@@ -149,16 +148,16 @@ if __name__ == "__main__":
     # execution
     print("You're in a boxing ring. There's someone in the opposite corner. Fight him?")
     print("""
-                              /////'
-                             '  # o
-                             C   - |
-                ___          '  =__'        ___
+                              //////
+                             |  # o|
+                             C   > |
+                ___          |  - _/        ___
                (` _ \_       |   |        _/  ')
                 \  (__\  ,---- _ |----.  /__)- |
                  \__  ( (           /  ) )  __/
-                   |_X_\/ \.   #  _.|  \/_X_|
-                     |  \ /(   /    /\ /  |
-                      \ /  (  ,    /  \ _/
+                   |_X_\/ \ .  #  _.|  \/_X_|
+                     \  \ /(   /    /\ /  /
+                      \__/ (  ,    /  \__/
                            /______/
                           [:::::::]
                          /*%*%*%*%*\\
