@@ -1,5 +1,6 @@
 from time import sleep
 from attack import Attack
+from random import randint
 
 class Player():
     def __init__(self, level, hp, stam, attacks):
@@ -75,7 +76,8 @@ class Player():
             try:
                 x = int(input("> "))
                 print("\nYou use " + self.attacks[x].name + ".\n")
-                ai.hp -= self.attacks[x].pow
+                damage = randint(self.attacks[x].pow, self.attacks[x].pow + self.level)
+                ai.hp -= damage
                 self.stam -= self.attacks[x].pow
                 break
             except (IndexError, ValueError):
