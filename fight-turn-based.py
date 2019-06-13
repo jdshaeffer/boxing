@@ -4,9 +4,10 @@ import sys, os, select
 from enemies.boxer import Boxer
 from attack import Attack
 from player import Player
+import webbrowser
 
-def print_tutorial():
-    print("here's a tutorial...")
+def open_tutorial():
+    webbrowser.open("https://github.com/jdshaeffer/boxing", new=2)
 
 if __name__ == "__main__":
     # flags
@@ -50,14 +51,22 @@ if __name__ == "__main__":
             print("Want to read the tutorial first?\n")
             tut = input("> ")
             if tut == "yes" or tut == "y":
-                print_tutorial()
-                sleep(5)
+                open_tutorial()
+                print("Ready to move on?\n")
+                while 1:
+                    ready = input("> ")
+                    if ready == "yes" or ready == "y":
+                        print("Okay, good luck.\n")
+                        sleep(2)
+                        break
+                    else:
+                        print("Ready now?\n")
             elif tut == "no" or tut == "n":
                 print("Okay, good luck.\n")
-                sleep(1)
+                sleep(2)
             else:
-                print("Never mind.\n")
-                sleep(1)
+                print("Never mind. Have fun out there!\n")
+                sleep(2)
             print("DING DING DING\n")
             sleep(1)
             print("A challenger approaches.\n")

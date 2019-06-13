@@ -12,18 +12,22 @@ class Player():
         while 1:
             print("""
     Your turn.
-    +------------+------------+
-    | (a) attack |  (r) rest  |
-    |------------|------------|
-    | (i) item   |  (f) flee  |
-    +------------+------------+\n""")
+    +---------------+---------------+
+    |  (a) attack   |  (e) examine  |
+    |---------------|---------------|
+    |  (i) item     |  (r) rest     |
+    +---------------+---------------+\n""")
             self.show_hp()
             self.show_stam()
             print("")
             x = input("> ")
             if x == "a" or x == "attack":
-                self.attack(ai)
-                break
+                if self.stam == 0:
+                    print("You don't have enough stamina to attack.")
+                    sleep(1)
+                else:
+                    self.attack(ai)
+                    break
             elif x == "i" or x == "item":
                 self.item()
                 break
@@ -35,6 +39,7 @@ class Player():
                 break
             else:
                 print("Sorry, try again.")
+                sleep(1)
 
     def show_hp(self):
         print("    +", end="") # 4 spaces
