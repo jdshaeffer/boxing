@@ -81,19 +81,21 @@ if __name__ == "__main__":
             print("Hm? Speak up son.\n")
 
     while fight:
+        ai.punch(guy)
         if guy.hp <= 0:
-            print("You fall to the ground.")
+            print("")
+            guy.show_hp()
+            print("\nYou fall to the ground.")
             sleep(1)
-            print("GAME OVER")
-            fight = False
-        elif ai.hp <= 0:
-            print("You knock him to the ground.")
-            sleep(1)
-            print("You win!")
-            sleep(1)
-            elapsedTime = time.time() - startTime
-            print("Final time:", elapsedTime, "\n")
+            print("GAME OVER\n")
             fight = False
         else:
-            ai.punch(guy)
             guy.turn(ai)
+            if ai.hp <= 0:
+                print("\nYou knock him to the ground.")
+                sleep(1)
+                print("You win!\n")
+                sleep(1)
+                elapsedTime = time.time() - startTime
+                print("Final time:", elapsedTime, "\n")
+                fight = False

@@ -44,6 +44,8 @@ class Player():
         print("    |",end="") # 4 spaces
         for _ in range(self.hp):
             print("#", end="")
+        if self.hp < 0:
+            self.hp = 0
         for _ in range((self.level+9)-self.hp):
             print(" ", end="")
         print("| ",self.hp,"/",self.level+9," (hp)")
