@@ -81,6 +81,8 @@ class player():
             except (IndexError, ValueError):
                 print("Please input a valid number.\n")
         sleep(1)
+        ai.show_enemy_hp()
+        sleep(1)
 
     def rest(self):
         print("You back off for a few seconds.")
@@ -103,6 +105,7 @@ class enemy():
         self.level = level
         self.hp = hp
         self.speed = speed
+
     def punch(self, player):
         print("He throws a high punch.\n\n> ", end = "")
         i, o, e = select.select([sys.stdin], [], [], self.speed) # ignore pylint here
@@ -123,6 +126,21 @@ class enemy():
             player.hp = player.hp - pow
         sleep(1)
     
+    def show_enemy_hp(self):
+        print("    +", end="") # 4 spaces
+        for _ in range(self.level+9): # level+9 because you start at level 1 with total hp 10
+            print("-", end="")
+        print("+")
+        print("    |", end="") # 4 spaces
+        for _ in range(self.hp):
+            print("#", end="")
+        for _ in range((self.level+9)-self.hp):
+            print(" ", end="")
+        print("| ",self.hp,"/",self.level+9," (enemy hp)")
+        print("    +", end="") # 4 spaces
+        for _ in range(self.level+9):
+            print("-", end="")
+        print("+")
     # def block(self, player):
 
 
