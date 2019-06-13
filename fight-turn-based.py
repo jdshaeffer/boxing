@@ -13,7 +13,7 @@ if __name__ == "__main__":
     start = True
     fight = False
 
-    # attack creation
+    # player attack creation
     righthook = Attack("righthook", 2)
     lefthook = Attack("lefthook", 2)
     rightjab = Attack("rightjab", 1)
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     attacks = [righthook, lefthook, rightjab, leftjab]
 
     # character creation
-    ai = Boxer(4,13,3) # level 1 ai with hp 13 and speed 3 (level plus 9 = default hp)
+    ai = Boxer(4,13,4) # level 1 ai with hp 13 and speed 4 (level plus 9 = default hp)
     guy = Player(1,10,10,attacks) # default: level 1, hp 10, stamina 10, default moves
 
     # execution

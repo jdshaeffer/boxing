@@ -67,7 +67,7 @@ class Player():
             print("")
             try:
                 x = int(input("> "))
-                print("You use " + self.attacks[x].name + ".\n")
+                print("\nYou use " + self.attacks[x].name + ".\n")
                 ai.hp -= self.attacks[x].pow
                 self.stam -= self.attacks[x].pow
                 break
@@ -80,9 +80,10 @@ class Player():
 
     def rest(self):
         print("You back off for a few seconds.")
-        if self.stam < self.level: # are stamina and hp going to grow at the same rate when you level up?
-            if self.level-self.stam == 1:
-                print("stamina + 1")
+        if self.stam < self.level+9: # are stamina and hp going to grow at the same rate when you level up?
+            # ^^^ also, remember that self.level + 9 is total hp and total stamina
+            if (self.level+9)-self.stam == 1:
+                print("(stamina + 1)")
                 self.stam += 1
             else:
                 print("(stamina + 2)\n")
