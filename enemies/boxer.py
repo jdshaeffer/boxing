@@ -2,14 +2,15 @@ import select, sys
 from random import randint
 from time import sleep
 from attack import Attack
+from player import Player
 
 # enemy attacks # NOTE: necessary to be instance of class because of examine command
 # each enemy will have its own class (no Enemy class) because of specific defense commands (see punch() below)
 # Boxers, for example, can be different levels, just like any other enemy
 lowpunch = Attack("low punch", 3, "he goes for your gut - use `block low` to avoid damage")
 highpunch = Attack("high punch", 4, "tries to sock you in the face - best to `duck` or `block high`")
-righthandpunch = Attack("right hand punch", 3, "comes with his right fist to your left side - use `block left` or `dodge right`")
-lefthandpunch = Attack("left hand punch", 3, "he'll go with his left hand to your right side - use `block right` or `dodge left`")
+righthandpunch = Attack("right side punch", 3, "comes to your right side - use `block right` or `dodge left`")
+lefthandpunch = Attack("left side punch", 3, "he goes to your left side - use `block left` or `dodge right`")
 attacks = [lowpunch, highpunch, righthandpunch, lefthandpunch]
 
 class Boxer():
@@ -44,17 +45,17 @@ class Boxer():
                     print("You block his attack.")
                 else:
                     self.successful_hit(player, whichpunch)
-            elif whichpunch == 2: # righthandpunch
-                if x == "block left":
-                    print("You block his attack.")
-                elif x == "dodge right":
-                    print("You dodge his attack.")
-                else:
-                    self.successful_hit(player, whichpunch)
-            elif whichpunch == 3: # lefthandpunch
+            elif whichpunch == 2: # rightsidepunch
                 if x == "block right":
                     print("You block his attack.")
                 elif x == "dodge left":
+                    print("You dodge his attack.")
+                else:
+                    self.successful_hit(player, whichpunch)
+            elif whichpunch == 3: # leftsidepunch
+                if x == "block left":
+                    print("You block his attack.")
+                elif x == "dodge right":
                     print("You dodge his attack.")
                 else:
                     self.successful_hit(player, whichpunch)
@@ -79,4 +80,5 @@ class Boxer():
         for _ in range(self.level+9):
             print("-", end="")
         print("+")
-    # def block(self, player):
+
+        # enemy blocking occurs in player attack function

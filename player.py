@@ -1,6 +1,8 @@
 from time import sleep
-from attack import Attack
 from random import randint
+from attack import Attack
+
+replist = [] # list that keeps track of your moves - should get cleared after every time repeat is found?
 
 class Player():
     def __init__(self, level, hp, stam, attacks):
@@ -40,7 +42,6 @@ class Player():
                 break
             else:
                 print("Sorry, try again.")
-                sleep(1)
 
     def show_hp(self):
         print("    +", end="") # 4 spaces
@@ -76,13 +77,24 @@ class Player():
             try:
                 x = int(input("> "))
                 print("\nYou use " + self.attacks[x].name + ".\n")
-                damage = randint(self.attacks[x].pow, self.attacks[x].pow + self.level)
-                ai.hp -= damage
+                sleep(.5)
+                replist.append(x)
+                if len(replist) != 1:
+                    if x == replist[len(replist)-2]: # if the current is equal to the last one
+                        print("Your opponent blocks your attack.\n")
+                        sleep(1)
+                    else:
+                        damage = randint(self.attacks[x].pow, self.attacks[x].pow + self.level)
+                        ai.hp -= damage
+                else:
+                    # not too dry here
+                    damage = randint(self.attacks[x].pow, self.attacks[x].pow + self.level)
+                    ai.hp -= damage
                 self.stam -= self.attacks[x].pow
                 break
             except (IndexError, ValueError):
                 print("Please input a valid number.\n")
-        sleep(1)
+            
         ai.show_enemy_hp()
         print()
         sleep(1)
@@ -90,7 +102,7 @@ class Player():
     def rest(self):
         print("You back off for a few seconds.")
         if self.stam < self.level+9: # are stamina and hp going to grow at the same rate when you level up?
-            # ^^^ also, remember that self.level + 9 is total hp and total stamina
+            # ^^^ also, remember that (self.level + 9) is total hp and total stamina
             if (self.level+9)-self.stam == 1:
                 print("(stamina + 1)")
                 self.stam += 1
@@ -102,7 +114,7 @@ class Player():
         sleep(1)
 
     def item(self):
-        print("item...")
+        print("items...")
         sleep(1)
 
     def examine(self, ai):
