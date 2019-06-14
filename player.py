@@ -20,7 +20,7 @@ class Player():
     +---------------+---------------+\n""")
             self.show_hp()
             self.show_stam()
-            print("")
+            print()
             x = input("> ")
             if x == "a" or x == "attack":
                 if self.stam == 0:
@@ -35,8 +35,8 @@ class Player():
             elif x == "r" or x == "rest":
                 self.rest()
                 break
-            elif x == "f" or x == "flee":
-                self.flee()
+            elif x == "e" or x == "examine":
+                self.examine(ai)
                 break
             else:
                 print("Sorry, try again.")
@@ -71,8 +71,8 @@ class Player():
     def attack(self, ai):
         while 1:
             for i in range(len(self.attacks)):
-                print(str(i) + ") " + self.attacks[i].name)
-            print("")
+                print(str(i) + ") " + self.attacks[i].name + ": " + self.attacks[i].description)
+            print()
             try:
                 x = int(input("> "))
                 print("\nYou use " + self.attacks[x].name + ".\n")
@@ -84,7 +84,7 @@ class Player():
                 print("Please input a valid number.\n")
         sleep(1)
         ai.show_enemy_hp()
-        print("")
+        print()
         sleep(1)
 
     def rest(self):
@@ -105,8 +105,12 @@ class Player():
         print("item...")
         sleep(1)
 
-    def flee(self):
-        print("fleeing...")
-        sleep(1)
+    def examine(self, ai):
+        print("You stare your opponent down.")
+        print("His moves:")
+        for i in range(len(ai.attacks)): # this is why attacks must be instance of enemy classes
+            print(" - " + ai.attacks[i].name + ": " + ai.attacks[i].description)
+        sleep(5) # give some extra time to read
+        print()
 
     # def levelup(self, attacks):

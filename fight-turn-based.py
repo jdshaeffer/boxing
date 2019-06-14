@@ -7,19 +7,19 @@ from player import Player
 import webbrowser
 
 def open_tutorial():
-    webbrowser.open("https://github.com/jdshaeffer/boxing", new=2)
+    webbrowser.open("https://github.com/jdshaeffer/boxing/wiki/Tutorial", new=2)
 
 if __name__ == "__main__":
     # flags
     start = True
     fight = False
 
-    # player attack creation
-    righthook = Attack("righthook", 2)
-    lefthook = Attack("lefthook", 2)
-    rightjab = Attack("rightjab", 1)
-    leftjab = Attack("leftjab", 1)
-    attacks = [righthook, lefthook, rightjab, leftjab]
+    # player attack creation # NOTE: this whole thing could be moved to be class specific (like in boxer.py)
+    # righthook = Attack("right hook", 2) # append these at level 2
+    # lefthook = Attack("left hook", 2)
+    rightjab = Attack("right jab", 1, "a strong forward punch with your right hand")
+    leftjab = Attack("left jab", 1, "a strong forward punch with your left hand")
+    attacks = [rightjab, leftjab]
 
     # character creation
     ai = Boxer(4,13,4) # level 1 ai with hp 13 and speed 4 (level plus 9 = default hp)
