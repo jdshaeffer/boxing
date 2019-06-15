@@ -71,6 +71,8 @@ class Boxer():
             print("-", end="")
         print("+")
         print("    |", end="") # 4 spaces
+        if self.hp < 0:
+            self.hp = 0
         for _ in range(self.hp):
             print("#", end="")
         for _ in range((self.level+9)-self.hp):

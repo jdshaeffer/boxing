@@ -5,11 +5,12 @@ from attack import Attack
 replist = [] # list that keeps track of your moves - should get cleared after every time repeat is found?
 
 class Player():
-    def __init__(self, level, hp, stam, attacks):
+    def __init__(self, level, hp, stam, attacks, inv):
         self.level = level
         self.hp = hp
         self.stam = stam
         self.attacks = attacks
+        self.inv = inv
 
     def turn(self, ai):
         while 1:
@@ -114,11 +115,15 @@ class Player():
         sleep(1)
 
     def item(self):
-        print("items...")
+        if len(self.inv) == 0:
+            print("You don't have anything at the moment.\n")
+        else:
+            for i in range(len(self.inv)):
+                print(str(i) + ") " + self.inv[i].name + ": " + self.inv[i].description)
         sleep(1)
 
     def examine(self, ai):
-        print("You stare your opponent down.")
+        print("You stare your opponent down.\n")
         print("His moves:")
         for i in range(len(ai.attacks)): # this is why attacks must be instance of enemy classes
             print(" - " + ai.attacks[i].name + ": " + ai.attacks[i].description)

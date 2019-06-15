@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     # character creation
     ai = Boxer(4,13,4) # level 1 ai with hp 13 and speed 4 (level plus 9 = default hp)
-    guy = Player(1,10,10,attacks) # default: level 1, hp 10, stamina 10, default moves
+    guy = Player(1,10,10,attacks,[]) # default: level 1, hp 10, stamina 10, default moves
 
     # execution
     print("You're in a boxing ring. There's someone in the opposite corner. Fight him?")
