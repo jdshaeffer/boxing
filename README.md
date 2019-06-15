@@ -3,7 +3,7 @@ A script testing an rpg style combat system for text-based games.
 
 The system is influenced by old Pokemon games and Undertale.
 
-Download the repo, run `python3 fight-turn-based.py` and enjoy.
+Download the repo, run `python3 fight-turn-based.py` and enjoy. Not supported on Windows unfortunately.
 
 You can play `fight.py` as well, but it was just a proof of concept - not that fun.
 
