@@ -1,12 +1,18 @@
-# script to test inventory dropping and adding - consistent when dropped in a room
-# each room has a list of available items - when dropped, if that item is in your inv list, add to room list
-# would be nice to have a room class - make objects with descriptions and that list as instances
-# for now it'll be ugly with just some random vars
-# inv would normally be filled with objects, just strings for now
-# look will display room description followed by a listing of all the room's current objects, dunnet style
-# each room can have a visit counter - to see how many times you visit a room - good for some flags,
-    # including first visit print whole description
-# will only need to pass in the room object eventually - not its singular attributes
+# script to test inventory dropping and adding - consistent when dropped in a room vvv
+    # each room has a list of available items - when dropped, if that item is in your inv list, add to room list
+    # would be nice to have a room class - make objects with descriptions and that list as instances
+    # for now it'll be ugly with just some random vars
+    # inv would normally be filled with objects, just strings for now
+    # look will display room description followed by a listing of all the room's current objects, dunnet style
+    # each room can have a visit counter - to see how many times you visit a room - good for some flags,
+        # including first visit print whole description
+    # will only need to pass in the room object eventually - not its singular attributes
+
+# this script also tests npc movement in the map
+    # extend npc class to have a ton of npc_in_room bool values as instances
+        # that way, better for functions - if npc.current_room = self.current_room ... MAYBE NOT BOOLS
+        # self can have a current room as well... great for boiler plate...
+        # no navigating with bools???
 
 # map
 """
@@ -20,30 +26,26 @@
 |--------|--------|
 
 """
+import threading
 
-# room flags
-red_room = True
-blue_room = False
-green_room = False
-yellow_room = False
+class Person():
+    def __init__(self, inv, location):
+        self.inv = inv
+        self.location = location
 
-# descriptions
-red_room_description = "You're in the red room."
-blue_room_description = "You're in the blue room."
-green_room_description = "You're in the green room."
-yellow_room_description = "You're in the yellow room."
+class Room():
+    def __init__(self, description, inv):
+        self.description = description
+        self.inv = inv
 
-# room inventories
-red_room_inv = ["apple","watermelon"]
-blue_room_inv = ["blueberry","fig"]
-green_room_inv = ["lime","grape"]
-yellow_room_inv = ["lemon","mango"]
+class NPC():
+    def __init__(self, name, description, location):
+        self.name = name
+        self.description = description
+        self.current_room = location
 
-# personal inventory
-inv = []
+# def npc_move():
 
-# defaults
-global_commands = ["l", "i", "take ", "drop "]
 
 def look(room_description, room_inv):
     print(room_description)
@@ -99,17 +101,42 @@ def print_personal_inv(inv):
         print("You don't have anything.\n")
 
 if __name__ == "__main__":
+    # room flags
+    red_room = True
+    blue_room = False
+    green_room = False
+    yellow_room = False
+
+    # rooms
+    red_room = Room("You're in the red room.",["apple","watermelon"])
+    blue_room = Room("You're in the blue room.",["blueberry","fig"])
+    green_room = Room("You're in the green room.",["lime","grape"])
+    yellow_room = Room("You're in the yellow room.",["lemon","mango"])
+
+    # guy
+    guy = Person([], red_room)
+
+    # defaults
+    global_commands = ["l", "i", "take ", "drop "]
+
+    # npc
+    girl = Person([], yellow_room)
+    # npc starts moving
+    # thread = threading.Thread(target=ai.punch, args=[guy])
+    # thread.daemon = True
+    # thread.start()
     while 1:
-        while red_room:
+        while guy.location == red_room:
             x = input("> ")
             if x == "e":
                 blue_room = True
                 red_room = False
+                # guy.location = blue_room
             elif x == "s":
                 green_room = True
                 red_room = False
             elif x in global_commands or x[:5] in global_commands:
-                print_global_commands(x, red_room_description, red_room_inv, inv)
+                print_global_commands(x, red_room.description, red_room.inv, guy.inv)
             else:
                 print("What?\n")
 
@@ -122,7 +149,7 @@ if __name__ == "__main__":
                 red_room = True
                 blue_room = False
             elif x in global_commands or x[:5] in global_commands:
-                print_global_commands(x, blue_room_description, blue_room_inv, inv)
+                print_global_commands(x, blue_room.description, blue_room.inv, guy.inv)
             else:
                 print("What?")
 
@@ -135,7 +162,7 @@ if __name__ == "__main__":
                 yellow_room = True
                 green_room = False
             elif x in global_commands or x[:5] in global_commands:
-                print_global_commands(x, green_room_description, green_room_inv, inv)   
+                print_global_commands(x, green_room.description, green_room.inv, guy.inv)   
             else:
                 print("What?")
 
@@ -148,6 +175,6 @@ if __name__ == "__main__":
                 blue_room = True
                 yellow_room = False
             elif x in global_commands or x[:5] in global_commands:
-                print_global_commands(x, yellow_room_description, yellow_room_inv, inv)
+                print_global_commands(x, yellow_room.description, yellow_room.inv, guy.inv)
             else:
                 print("What?")
