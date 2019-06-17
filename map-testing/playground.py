@@ -101,11 +101,11 @@ def print_personal_inv(inv):
         print("You don't have anything.\n")
 
 if __name__ == "__main__":
-    # room flags
-    red_room = True
-    blue_room = False
-    green_room = False
-    yellow_room = False
+    # # room flags
+    # red_room = True
+    # blue_room = False
+    # green_room = False
+    # yellow_room = False
 
     # rooms
     red_room = Room("You're in the red room.",["apple","watermelon"])
@@ -129,51 +129,42 @@ if __name__ == "__main__":
         while guy.location == red_room:
             x = input("> ")
             if x == "e":
-                blue_room = True
-                red_room = False
-                # guy.location = blue_room
+                guy.location = blue_room
             elif x == "s":
-                green_room = True
-                red_room = False
+                guy.location = green_room
             elif x in global_commands or x[:5] in global_commands:
                 print_global_commands(x, red_room.description, red_room.inv, guy.inv)
             else:
                 print("What?\n")
 
-        while blue_room:
+        while guy.location == blue_room:
             x = input("> ")
             if x == "s":
-                yellow_room = True
-                blue_room = False
+                guy.location = yellow_room
             elif x == "w":
-                red_room = True
-                blue_room = False
+                guy.location = red_room
             elif x in global_commands or x[:5] in global_commands:
                 print_global_commands(x, blue_room.description, blue_room.inv, guy.inv)
             else:
                 print("What?")
 
-        while green_room:
+        while guy.location == green_room:
             x = input("> ")
             if x == "n":
-                red_room = True
-                green_room = False
+                guy.location = red_room
             elif x == "e":
-                yellow_room = True
-                green_room = False
+                guy.location = yellow_room
             elif x in global_commands or x[:5] in global_commands:
                 print_global_commands(x, green_room.description, green_room.inv, guy.inv)   
             else:
                 print("What?")
 
-        while yellow_room:
+        while guy.location == yellow_room:
             x = input("> ")
             if x == "w":
-                green_room = True
-                yellow_room = False
+                guy.location = green_room
             elif x == "n":
-                blue_room = True
-                yellow_room = False
+                guy.location = blue_room
             elif x in global_commands or x[:5] in global_commands:
                 print_global_commands(x, yellow_room.description, yellow_room.inv, guy.inv)
             else:
