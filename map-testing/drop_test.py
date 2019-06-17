@@ -6,6 +6,7 @@
 # look will display room description followed by a listing of all the room's current objects, dunnet style
 # each room can have a visit counter - to see how many times you visit a room - good for some flags,
     # including first visit print whole description
+# will only need to pass in the room object eventually - not its singular attributes
 
 # map
 """
@@ -20,20 +21,45 @@
 
 """
 
-# rooms
+# room flags
 red_room = True
 blue_room = False
 green_room = False
 yellow_room = False
 
+# descriptions
+red_room_description = "You're in the red room."
+blue_room_description = "You're in the blue room."
+green_room_description = "You're in the green room."
+yellow_room_description = "You're in the yellow room."
+
 # room inventories
-red_room_inv = ["apple"]
-blue_room_inv = ["blueberry"]
-green_room_inv = ["lime"]
-yellow_room_inv = ["lemon"]
+red_room_inv = ["apple","watermelon"]
+blue_room_inv = ["blueberry","fig"]
+green_room_inv = ["lime","grape"]
+yellow_room_inv = ["lemon","mango"]
 
 # personal inventory
 inv = []
+
+# defaults
+global_commands = ["l", "i", "take ", "drop "]
+
+def look(room_description, room_inv):
+    print(room_description)
+    print_room_inv(room_inv)
+
+def print_global_commands(input, room_description, room_inv, inv):
+    if input == "l":
+        look(room_description, room_inv)
+    elif input == "i":
+        print_personal_inv(inv)
+    elif input[:5] == "take ":
+        thing = input[5:]
+        take(thing,room_inv,inv)
+    elif input[:5] == "drop ":
+        thing = input[5:]
+        drop(thing,room_inv,inv)
 
 def take(thing, room_inv, inv):
     if thing not in room_inv:
@@ -67,7 +93,7 @@ def print_personal_inv(inv):
     if len(inv) > 0:
         print("You have:")
         for i in range(len(inv)):
-            print("* " + inv[i])
+            print("- " + inv[i])
         print()
     else:
         print("You don't have anything.\n")
@@ -82,17 +108,8 @@ if __name__ == "__main__":
             elif x == "s":
                 green_room = True
                 red_room = False
-            elif x == "l":
-                print("You're in the red room.")
-                print_room_inv(red_room_inv)
-            elif x == "i":
-                print_personal_inv(inv)
-            elif x[:5] == "take ":
-                thing = x[5:]
-                take(thing,red_room_inv,inv)
-            elif x[:5] == "drop ":
-                thing = x[5:]
-                drop(thing,red_room_inv,inv)
+            elif x in global_commands or x[:5] in global_commands:
+                print_global_commands(x, red_room_description, red_room_inv, inv)
             else:
                 print("What?\n")
 
@@ -104,17 +121,8 @@ if __name__ == "__main__":
             elif x == "w":
                 red_room = True
                 blue_room = False
-            elif x == "l":
-                print("You're in the blue room.")
-                print_room_inv(blue_room_inv)
-            elif x == "i":
-                print_personal_inv(inv)
-            elif x[:5] == "take ":
-                thing = x[5:]
-                take(thing,blue_room_inv,inv)
-            elif x[:5] == "drop ":
-                thing = x[5:]
-                drop(thing,blue_room_inv,inv)
+            elif x in global_commands or x[:5] in global_commands:
+                print_global_commands(x, blue_room_description, blue_room_inv, inv)
             else:
                 print("What?")
 
@@ -126,17 +134,8 @@ if __name__ == "__main__":
             elif x == "e":
                 yellow_room = True
                 green_room = False
-            elif x == "l":
-                print("You're in the green room.")
-                print_room_inv(green_room_inv)
-            elif x == "i":
-                print_personal_inv(inv)
-            elif x[:5] == "take ":
-                thing = x[5:]
-                take(thing,green_room_inv,inv)
-            elif x[:5] == "drop ":
-                thing = x[5:]
-                drop(thing,green_room_inv,inv)   
+            elif x in global_commands or x[:5] in global_commands:
+                print_global_commands(x, green_room_description, green_room_inv, inv)   
             else:
                 print("What?")
 
@@ -148,16 +147,7 @@ if __name__ == "__main__":
             elif x == "n":
                 blue_room = True
                 yellow_room = False
-            elif x == "l":
-                print("You're in the yellow room.")
-                print_room_inv(yellow_room_inv)
-            elif x == "i":
-                print_personal_inv(inv)
-            elif x[:5] == "take ":
-                thing = x[5:]
-                take(thing,yellow_room_inv,inv)
-            elif x[:5] == "drop ":
-                thing = x[5:]
-                drop(thing,yellow_room_inv,inv)
+            elif x in global_commands or x[:5] in global_commands:
+                print_global_commands(x, yellow_room_description, yellow_room_inv, inv)
             else:
                 print("What?")
