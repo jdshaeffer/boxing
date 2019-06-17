@@ -33,7 +33,8 @@ class Person():
         self.location = location
 
 class Room():
-    def __init__(self, description, inv):
+    def __init__(self, name, description, inv):
+        self.name = name
         self.description = description
         self.inv = inv
 
@@ -49,6 +50,7 @@ def girl_move(npc, rooms): # probs will be specific to each character
         sleep(5)
         random_room = randint(0, len(rooms)-1)
         npc.location = rooms[random_room]
+        print("Ada is in " + npc.location.name)
 
 def check_npcs(guy, npcs):
     for i in range(len(npcs)):
@@ -96,9 +98,8 @@ def print_room_inv(room_inv):
                 print("There is a " + room_inv[i] + " here.")
             else:
                 print("There is an " + room_inv[i] + " here.")
-        print()
     else:
-        print("There's nothing here.\n")
+        print("There's nothing here.")
 
 def print_personal_inv(inv):
     if len(inv) > 0:
@@ -112,10 +113,10 @@ def print_personal_inv(inv):
 
 if __name__ == "__main__":
     # rooms
-    red_room = Room("You're in the red room.",["apple","watermelon"])
-    blue_room = Room("You're in the blue room.",["blueberry","fig"])
-    green_room = Room("You're in the green room.",["lime","grape"])
-    yellow_room = Room("You're in the yellow room.",["lemon","mango"])
+    red_room = Room("the red room","You're in the red room.",["apple","watermelon"])
+    blue_room = Room("the blue room","You're in the blue room.",["blueberry","fig"])
+    green_room = Room("the green room","You're in the green room.",["lime","grape"])
+    yellow_room = Room("the yellow room","You're in the yellow room.",["lemon","mango"])
     rooms = [red_room, blue_room, green_room, yellow_room]
 
     # guy
