@@ -125,7 +125,7 @@ class Player():
     def examine(self, ai):
         print("You stare your opponent down.\n")
         print("His moves:")
-        for i in range(len(ai.attacks)): # this is why attacks must be instance of enemy classes
+        for i in range(len(ai.attacks)): # this is why attacks must be an instance of enemy classes
             print(" - " + ai.attacks[i].name + ": " + ai.attacks[i].description)
         sleep(5) # give some extra time to read
         print()
