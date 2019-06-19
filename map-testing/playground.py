@@ -50,7 +50,6 @@ def girl_move(npc, rooms): # probs will be specific to each character
         sleep(5)
         random_room = randint(0, len(rooms)-1)
         npc.location = rooms[random_room]
-        print("Ada is in " + npc.location.name)
 
 def check_npcs(guy, npcs):
     for i in range(len(npcs)):
@@ -129,11 +128,11 @@ if __name__ == "__main__":
     girl = NPC("Ada","She's in Victorian garb.",yellow_room)
     npcs = [girl]
 
+    thread = threading.Thread(target=girl_move, args=[girl, rooms])
+    thread.daemon = True
+    thread.start()
 
     while 1:
-        thread = threading.Thread(target=girl_move, args=[girl, rooms])
-        thread.daemon = True
-        thread.start()
         while guy.location == red_room:
             x = input("> ")
             if x == "e":
