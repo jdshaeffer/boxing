@@ -45,16 +45,21 @@ class NPC():
         self.location = location
 
 
-def girl_move(npc, rooms): # probs will be specific to each character
-    while 1:
-        sleep(5)
-        random_room = randint(0, len(rooms)-1)
-        npc.location = rooms[random_room]
+def npc_move(npcs, rooms): # probs will be specific to each character because they'll be moving at diff rates
+    while 1: # inf loop because it's a thread
+        for i in range(len(npcs)):
+            random_room = randint(0, len(rooms)-1)
+            npcs[i].location = rooms[random_room]
+    sleep(5)
 
 def check_npcs(guy, npcs):
+    is_here = False
     for i in range(len(npcs)):
         if guy.location == npcs[i].location:
-            print(npcs[i].name + " is here.\n")
+            print(npcs[i].name + " is here.")
+            is_here = True
+    if is_here:
+        print()
 
 def look(room_description, room_inv, guy, npcs):
     print(room_description)
@@ -97,8 +102,9 @@ def print_room_inv(room_inv):
                 print("There is a " + room_inv[i] + " here.")
             else:
                 print("There is an " + room_inv[i] + " here.")
+        print()
     else:
-        print("There's nothing here.")
+        print("There's nothing here.\n")
 
 def print_personal_inv(inv):
     if len(inv) > 0:
@@ -125,10 +131,11 @@ if __name__ == "__main__":
     global_commands = ["l", "i", "take ", "drop "]
 
     # npc
-    girl = NPC("Ada","She's in Victorian garb.",yellow_room)
-    npcs = [girl]
+    ada = NPC("Ada","She's in Victorian garb.",yellow_room)
+    grace = NPC("Grace","Super smart and cool.",blue_room)
+    npcs = [ada, grace]
 
-    thread = threading.Thread(target=girl_move, args=[girl, rooms])
+    thread = threading.Thread(target=npc_move, args=[npcs, rooms])
     thread.daemon = True
     thread.start()
 
