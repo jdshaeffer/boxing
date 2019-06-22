@@ -27,7 +27,7 @@ import threading
 from random import randint
 from time import sleep
 
-class Person():
+class Player():
     def __init__(self, inv, location):
         self.inv = inv
         self.location = location
@@ -39,44 +39,45 @@ class Room():
         self.inv = inv
 
 class NPC():
-    def __init__(self, name, description, location): # maybe add movement function in the future...
+    def __init__(self, name, description, location, is_talking):
         self.name = name
         self.description = description
         self.location = location
+        self.is_talking = is_talking
 
-
-def npc_move(npcs, rooms): # probs will be specific to each character because they'll be moving at diff rates
-    while 1: # inf loop because it's a thread
+def npc_move(npcs, rooms): # will be specific later to each character because they'll be moving at diff rates
+    while 1:
         for i in range(len(npcs)):
-            random_room = randint(0, len(rooms)-1)
-            npcs[i].location = rooms[random_room]
+            if not npcs[i].is_talking: # only move if the npc is not talking with user
+                random_room = randint(0, len(rooms)-1)
+                npcs[i].location = rooms[random_room]
     sleep(5)
 
-def check_npcs(guy, npcs):
+def check_npcs(user, npcs):
     is_here = False
     for i in range(len(npcs)):
-        if guy.location == npcs[i].location:
+        if user.location == npcs[i].location:
             print(npcs[i].name + " is here.")
             is_here = True
     if is_here:
         print()
 
-def look(room_description, room_inv, guy, npcs):
+def look(room_description, room_inv, user, npcs):
     print(room_description)
     print_room_inv(room_inv)
-    check_npcs(guy, npcs)
+    check_npcs(user, npcs)
 
-def print_global_commands(input, room_description, room_inv, guy, npcs):
+def print_global_commands(input, room_description, room_inv, user, npcs):
     if input == "l":
-        look(room_description, room_inv, guy, npcs)
+        look(room_description, room_inv, user, npcs)
     elif input == "i":
-        print_personal_inv(guy.inv)
+        print_personal_inv(user.inv)
     elif input[:5] == "take ":
         thing = input[5:]
-        take(thing,room_inv,guy.inv)
+        take(thing,room_inv,user.inv)
     elif input[:5] == "drop ":
         thing = input[5:]
-        drop(thing,room_inv,guy.inv)
+        drop(thing,room_inv,user.inv)
 
 def take(thing, room_inv, inv):
     if thing not in room_inv:
@@ -124,15 +125,15 @@ if __name__ == "__main__":
     yellow_room = Room("the yellow room","You're in the yellow room.",["lemon","mango"])
     rooms = [red_room, blue_room, green_room, yellow_room]
 
-    # guy
-    guy = Person([], red_room)
+    # user
+    user = Player([], red_room)
 
     # defaults
     global_commands = ["l", "i", "take ", "drop "]
 
     # npc
-    ada = NPC("Ada","She's in Victorian garb.",yellow_room)
-    grace = NPC("Grace","Super smart and cool.",blue_room)
+    ada = NPC("Ada","She's in Victorian garb.",yellow_room, False)
+    grace = NPC("Grace","Her name's Grace.",blue_room, False)
     npcs = [ada, grace]
 
     thread = threading.Thread(target=npc_move, args=[npcs, rooms])
@@ -140,46 +141,46 @@ if __name__ == "__main__":
     thread.start()
 
     while 1:
-        while guy.location == red_room:
+        while user.location == red_room:
             x = input("> ")
             if x == "e":
-                guy.location = blue_room
+                user.location = blue_room
             elif x == "s":
-                guy.location = green_room
+                user.location = green_room
             elif x in global_commands or x[:5] in global_commands:
-                print_global_commands(x, red_room.description, red_room.inv, guy, npcs)
+                print_global_commands(x, red_room.description, red_room.inv, user, npcs)
             else:
                 print("What?\n")
 
-        while guy.location == blue_room:
+        while user.location == blue_room:
             x = input("> ")
             if x == "s":
-                guy.location = yellow_room
+                user.location = yellow_room
             elif x == "w":
-                guy.location = red_room
+                user.location = red_room
             elif x in global_commands or x[:5] in global_commands:
-                print_global_commands(x, blue_room.description, blue_room.inv, guy, npcs)
+                print_global_commands(x, blue_room.description, blue_room.inv, user, npcs)
             else:
                 print("What?\n")
 
-        while guy.location == green_room:
+        while user.location == green_room:
             x = input("> ")
             if x == "n":
-                guy.location = red_room
+                user.location = red_room
             elif x == "e":
-                guy.location = yellow_room
+                user.location = yellow_room
             elif x in global_commands or x[:5] in global_commands:
-                print_global_commands(x, green_room.description, green_room.inv, guy, npcs)   
+                print_global_commands(x, green_room.description, green_room.inv, user, npcs)   
             else:
                 print("What?\n")
 
-        while guy.location == yellow_room:
+        while user.location == yellow_room:
             x = input("> ")
             if x == "w":
-                guy.location = green_room
+                user.location = green_room
             elif x == "n":
-                guy.location = blue_room
+                user.location = blue_room
             elif x in global_commands or x[:5] in global_commands:
-                print_global_commands(x, yellow_room.description, yellow_room.inv, guy, npcs)
+                print_global_commands(x, yellow_room.description, yellow_room.inv, user, npcs)
             else:
                 print("What?\n")
