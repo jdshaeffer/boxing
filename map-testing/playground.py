@@ -26,6 +26,7 @@
 import threading
 from random import randint
 from time import sleep
+from playsound import playsound # this works - ignore pylint
 
 class Player():
     def __init__(self, inv, location):
@@ -81,7 +82,7 @@ def print_global_commands(input, room_description, room_inv, user, npcs):
 
 def take(thing, room_inv, inv):
     if thing not in room_inv:
-        print("I don't know what you're trying to take.\n")
+        print("You can't take that.\n")
     else:
         print("You take the " + thing + ".\n")
         inv.append(thing)
@@ -104,8 +105,8 @@ def print_room_inv(room_inv):
             else:
                 print("There is an " + room_inv[i] + " here.")
         print()
-    else:
-        print("There's nothing here.\n")
+    # else:
+    #    print("There's nothing here.\n") # maybe not have this... ruins flow of description
 
 def print_personal_inv(inv):
     if len(inv) > 0:
