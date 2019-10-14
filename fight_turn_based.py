@@ -22,7 +22,7 @@ if __name__ == '__main__':
     attacks = [rightjab, leftjab]
 
     # character creation
-    ai = Boxer(4,13,4) # level 1 ai with hp 13 and speed 4 (level plus 9 = default hp)
+    ai = Boxer(4,10,4) # level 1 ai with hp 10 and speed 4 (hp is always level + 6)
     guy = Player(1,10,10,attacks,[]) # default: level 1, hp 10, stamina 10, default moves
 
     # execution

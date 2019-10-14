@@ -7,10 +7,10 @@ from player import Player
 # enemy attacks # NOTE: necessary to be instance of class because of examine command
 # each enemy will have its own class (no Enemy class) because of specific defense commands (see punch() below)
 # Boxers, for example, can be different levels, just like any other enemy
-lowpunch = Attack("low punch", 3, "he goes for your gut - use `block low` to avoid damage")
-highpunch = Attack("high punch", 4, "tries to sock you in the face - best to `duck` or `block high`")
-righthandpunch = Attack("right side punch", 3, "comes to your right side - use `block right` or `dodge left`")
-lefthandpunch = Attack("left side punch", 3, "he goes to your left side - use `block left` or `dodge right`")
+lowpunch = Attack('low punch', 3, 'he goes for your gut - use `block low` to avoid damage')
+highpunch = Attack('high punch', 4, 'tries to sock you in the face - best to `duck` or `block high`')
+righthandpunch = Attack('right side punch', 3, 'comes to your right side - use `block right` or `dodge left`')
+lefthandpunch = Attack('left side punch', 3, 'he goes to your left side - use `block left` or `dodge right`')
 attacks = [lowpunch, highpunch, righthandpunch, lefthandpunch]
 
 class Boxer():
@@ -21,66 +21,66 @@ class Boxer():
         self.attacks = attacks
 
     def successful_hit(self, player, whichpunch): # save some lines with this
-        print("He hits you.")
+        print('He hits you.')
         pow = randint(self.attacks[whichpunch].pow, self.level)
         player.hp = player.hp - pow
 
     def punch(self, player):
         whichpunch = randint(0, len(self.attacks)-1)
-        print("He throws a " + self.attacks[whichpunch].name + ".\n\n> ", end = "")
+        print('He throws a ' + self.attacks[whichpunch].name + '.\n\n> ', end = '')
         i, o, e = select.select([sys.stdin], [], [], self.speed) # ignore pylint here
         print()
         if i:
             # like in undertale - lots of custom commands for every enemy
             x = sys.stdin.readline().strip()
             if whichpunch == 0: # lowpunch
-                if x == "block low":
-                    print("You block his attack.")
+                if x == 'block low':
+                    print('You block his attack.')
                 else:
                     self.successful_hit(player, whichpunch)
             elif whichpunch == 1: # highpunch
-                if x == "duck":
-                    print("He misses.")
-                elif x == "block high":
-                    print("You block his attack.")
+                if x == 'duck':
+                    print('He misses.')
+                elif x == 'block high':
+                    print('You block his attack.')
                 else:
                     self.successful_hit(player, whichpunch)
             elif whichpunch == 2: # rightsidepunch
-                if x == "block right":
-                    print("You block his attack.")
-                elif x == "dodge left":
-                    print("You dodge his attack.")
+                if x == 'block right':
+                    print('You block his attack.')
+                elif x == 'dodge left':
+                    print('You dodge his attack.')
                 else:
                     self.successful_hit(player, whichpunch)
             elif whichpunch == 3: # leftsidepunch
-                if x == "block left":
-                    print("You block his attack.")
-                elif x == "dodge right":
-                    print("You dodge his attack.")
+                if x == 'block left':
+                    print('You block his attack.')
+                elif x == 'dodge right':
+                    print('You dodge his attack.')
                 else:
                     self.successful_hit(player, whichpunch)
         else:
-            print("\nHe hits you.")
+            print('\nHe hits you.')
             pow = randint(2, self.level)
             player.hp = player.hp - pow
         sleep(1)
     
     def show_enemy_hp(self):
-        print("    +", end="") # 4 spaces
-        for _ in range(self.level+9):
-            print("-", end="")
-        print("+")
-        print("    |", end="") # 4 spaces
+        print('    +', end='') # 4 spaces
+        for _ in range(self.level+6):
+            print('-', end='')
+        print('+')
+        print('    |', end='') # 4 spaces
         if self.hp < 0:
             self.hp = 0
         for _ in range(self.hp):
-            print("#", end="")
-        for _ in range((self.level+9)-self.hp):
-            print(" ", end="")
-        print("| ",self.hp,"/",self.level+9," (enemy hp)")
-        print("    +", end="") # 4 spaces
-        for _ in range(self.level+9):
-            print("-", end="")
-        print("+")
+            print('#', end='')
+        for _ in range((self.level+6)-self.hp):
+            print(' ', end='')
+        print('| ',self.hp,'/',self.level+6,' (enemy hp)')
+        print('    +', end='') # 4 spaces
+        for _ in range(self.level+6):
+            print('-', end='')
+        print('+')
 
         # enemy blocking occurs in player attack function
